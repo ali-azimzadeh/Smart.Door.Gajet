@@ -1,4 +1,5 @@
 ﻿using Azx;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,9 +10,10 @@ using System.Web;
 
 namespace Smart.Door.Gajet.Server.Controllers
 {
+    [Infrastructure.Attributes.Authorize]
     public class UsersController : Infrastructure.BaseApiControllerWithDatabase
     {
-        public UsersController(Data.IUnitOfWork unitOfWork,Services.IUserService userService)
+        public UsersController(Data.IUnitOfWork unitOfWork, Services.IUserService userService)
             : base(unitOfWork: unitOfWork)
         {
             UserService = userService;
@@ -23,40 +25,46 @@ namespace Smart.Door.Gajet.Server.Controllers
         //// *******************************
         ////         Login
         //// *******************************
-        //[Microsoft.AspNetCore.Mvc.HttpPost(template:"login")]
+        [Microsoft.AspNetCore.Mvc.HttpPost(template: "login")]
 
-        //[Microsoft.AspNetCore.Cors.EnableCors(policyName: Startup.OTHERS_CORS_POLICY)]
+      //  [Microsoft.AspNetCore.Cors.EnableCors(policyName: Startup.OTHERS_CORS_POLICY)]
 
-        //[Microsoft.AspNetCore.Mvc.ProducesResponseType
-        //    (typeof(ViewModels.User.LoginResponseViewModel), Microsoft.AspNetCore.Http.StatusCodes.Status200OK)]
+        [Microsoft.AspNetCore.Mvc.ProducesResponseType
+            (typeof(ViewModels.User.LoginResponseViewModel), Microsoft.AspNetCore.Http.StatusCodes.Status200OK)]
 
-        //[Microsoft.AspNetCore.Mvc.ProducesResponseType
-        //    (typeof(ViewModels.General.ErrorViewModel), Microsoft.AspNetCore.Http.StatusCodes.Status400BadRequest)]
-        //public Microsoft.AspNetCore.Mvc.ActionResult<ViewModels.User.LoginResponseViewModel> Login(ViewModels.User.LoginRequestViewModel viewModel)
-        //{
-        //    ViewModels.User.LoginResponseViewModel loginResponseViewModel = 
-        //        UserService.Login(loginRequestViewModel: viewModel);
+        [Microsoft.AspNetCore.Mvc.ProducesResponseType
+            (typeof(ViewModels.General.ErrorViewModel), Microsoft.AspNetCore.Http.StatusCodes.Status400BadRequest)]
 
-        //    if(loginResponseViewModel==null)
-        //    {
-        //        return null;
-        //    }
+        [Infrastructure.Attributes.IgnoreAuthorize]
 
-        //    return Ok(loginResponseViewModel);
-        //}
+        public Microsoft.AspNetCore.Mvc.ActionResult<ViewModels.User.LoginResponseViewModel>
+            Login(ViewModels.User.LoginRequestViewModel viewModel)
+        {
+            ViewModels.User.LoginResponseViewModel loginResponseViewModel =
+                UserService.Login(loginRequestViewModel: viewModel);
+
+            if (loginResponseViewModel == null)
+            {
+                return null;
+            }
+
+            return Ok(loginResponseViewModel);
+        }
 
         // *******************************
         //         LoginAsync
         // *******************************
         [Microsoft.AspNetCore.Mvc.HttpPost(template: "LoginAsync")]
 
-      //  [Microsoft.AspNetCore.Cors.EnableCors(policyName: Startup.OTHERS_CORS_POLICY)]
+        //      [Microsoft.AspNetCore.Cors.EnableCors(policyName: Startup.ADMIN_CORS_POLICY)]
 
         [Microsoft.AspNetCore.Mvc.ProducesResponseType
-            (typeof(ViewModels.User.LoginResponseViewModel),Microsoft.AspNetCore.Http.StatusCodes.Status200OK)]
+            (typeof(ViewModels.User.LoginResponseViewModel), Microsoft.AspNetCore.Http.StatusCodes.Status200OK)]
 
         [Microsoft.AspNetCore.Mvc.ProducesResponseType
             (typeof(ViewModels.General.ErrorViewModel), Microsoft.AspNetCore.Http.StatusCodes.Status400BadRequest)]
+
+        [Infrastructure.Attributes.IgnoreAuthorize]
 
         public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<ViewModels.User.LoginResponseViewModel>>
             LoginAsync(ViewModels.User.LoginRequestViewModel viewModel)
@@ -81,6 +89,7 @@ namespace Smart.Door.Gajet.Server.Controllers
         //            GetAllAsync
         // *******************************
         [Microsoft.AspNetCore.Mvc.HttpGet]
+
         public async System.Threading.Tasks.Task
             <Microsoft.AspNetCore.Mvc.ActionResult<System.Collections.Generic.IEnumerable<Azx.Result<Models.User>>>> GetAllAsync()
         {
@@ -126,7 +135,6 @@ namespace Smart.Door.Gajet.Server.Controllers
         // *******************************
         [Microsoft.AspNetCore.Mvc.HttpGet(template: "{id:Guid}")] //این دستور بهتر است 
 
-        [Infrastructure.Attributes.Authorize]
         public async System.Threading.Tasks.Task
        <Microsoft.AspNetCore.Mvc.ActionResult<Result<Models.User>>> GetByIdAsync(System.Guid id)
         {
@@ -170,6 +178,7 @@ namespace Smart.Door.Gajet.Server.Controllers
         //         GetActiveAsync
         // *******************************
         [Microsoft.AspNetCore.Mvc.HttpGet(template: "active")] //این دستور بهتر است 
+
         public async System.Threading.Tasks.Task
        <Microsoft.AspNetCore.Mvc.ActionResult<System.Collections.Generic.IEnumerable<Result<Models.User>>>> GetActiveAsync()
         {
@@ -213,6 +222,7 @@ namespace Smart.Door.Gajet.Server.Controllers
         //         GetByUserNameAsync
         // *******************************
         [Microsoft.AspNetCore.Mvc.HttpGet(template: "{username}")]
+
         public async System.Threading.Tasks.Task
             <Microsoft.AspNetCore.Mvc.ActionResult<Result<Models.User>>> GetByUserNameAsync(string username)
         {
@@ -255,6 +265,7 @@ namespace Smart.Door.Gajet.Server.Controllers
         //             PostAsync
         // *******************************
         [Microsoft.AspNetCore.Mvc.HttpPost]
+
         public async System.Threading.Tasks.Task
                 <Microsoft.AspNetCore.Mvc.ActionResult<Azx.Result<Models.User>>> PostAsync(Models.User user)
         {
@@ -317,6 +328,7 @@ namespace Smart.Door.Gajet.Server.Controllers
         // *******************************
 
         [Microsoft.AspNetCore.Mvc.HttpPut("{id:Guid}")]
+
         public async System.Threading.Tasks.Task
                 <Microsoft.AspNetCore.Mvc.ActionResult<Result<Models.User>>> PutAsync(System.Guid id, Models.User user)
         {
@@ -391,6 +403,7 @@ namespace Smart.Door.Gajet.Server.Controllers
         // *******************************
 
         [Microsoft.AspNetCore.Mvc.HttpDelete("{id:Guid}")]
+
         public async System.Threading.Tasks.Task
                 <Microsoft.AspNetCore.Mvc.ActionResult<Result<bool>>> DeleteAsync(Guid id)
         {

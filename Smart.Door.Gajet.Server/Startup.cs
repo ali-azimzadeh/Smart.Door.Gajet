@@ -127,9 +127,9 @@ namespace Smart.Door.Gajet.Server
             app.UseRouting();
 
             //app.UseAuthentication();
-            app.UseAuthorization();
+            //app.UseAuthorization();
 
-            //app.UseMiddleware<Infrastructure.Middlewares.JwtMiddleware>();
+            app.UseMiddleware<Infrastructure.Middlewares.JwtMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
