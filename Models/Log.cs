@@ -8,8 +8,16 @@ namespace Models
 {
     public class Log : Base.Entity
     {
-        public Log() : base()
+        //public Log() : base()
+        //{
+        //}
+
+        public Log(string message) : base()
         {
+            Message = message;
+
+            TimeStamp =
+                System.DateTime.Now;
         }
 
         // **********
@@ -94,6 +102,17 @@ namespace Models
             Name = nameof(Resources.DataDictionary.Properties))]
         public string Properties { get; set; }
         // **********
+
+        //public bool IsSeen { get; set; }
+
+        //public string ClassName { get; set; }
+
+        //public string MethodName { get; set; }
+
+        //public string NamespaceName { get; set; }
+
+
+
 
 
 

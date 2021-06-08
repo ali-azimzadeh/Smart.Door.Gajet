@@ -9,7 +9,8 @@ namespace Services
 {
     public class UserService : object, IUserService
     {
-        public UserService(Microsoft.Extensions.Options.IOptions<Infrastructure.ApplicationSettings.Main> options, Data.IUnitOfWork unitOfWork)
+        public UserService
+            (Microsoft.Extensions.Options.IOptions<Infrastructure.ApplicationSettings.Main> options, Data.IUnitOfWork unitOfWork)
             : base()
         {
             MainSettings = options.Value;

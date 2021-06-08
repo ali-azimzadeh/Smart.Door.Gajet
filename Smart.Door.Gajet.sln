@@ -5,15 +5,19 @@ VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Smart.Door.Gajet.Server", "Smart.Door.Gajet.Server\Smart.Door.Gajet.Server.csproj", "{D8694971-58E1-499E-B387-F4300E5D7890}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{8962ACB4-D2AF-4520-A4A8-F28E254B79A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Data\Data.csproj", "{8962ACB4-D2AF-4520-A4A8-F28E254B79A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{D91580D3-F41B-49F4-BBBD-1EEB66353D0D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{D91580D3-F41B-49F4-BBBD-1EEB66353D0D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Resources\Resources.csproj", "{C3AFE27E-4356-4F48-A4F8-B659D737862F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Resources", "Resources\Resources.csproj", "{C3AFE27E-4356-4F48-A4F8-B659D737862F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViewModels", "ViewModels\ViewModels.csproj", "{E2E54678-28D1-431B-BD56-22920C237BEF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ViewModels", "ViewModels\ViewModels.csproj", "{E2E54678-28D1-431B-BD56-22920C237BEF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Azx", "Azx\Azx.csproj", "{A41F5C88-972F-4FB8-ADD8-65F5F2396B68}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Azx", "Azx\Azx.csproj", "{A41F5C88-972F-4FB8-ADD8-65F5F2396B68}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Smart.Door.Gajet.Client", "Smart.Door.Gajet.Client\Smart.Door.Gajet.Client.csproj", "{CEED7803-5D64-45D5-BDB1-0107192258C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Azx.Razor", "Azx.Razor\Azx.Razor.csproj", "{3A805B1F-1F23-44BF-AA6A-C23F87CF4F72}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +49,14 @@ Global
 		{A41F5C88-972F-4FB8-ADD8-65F5F2396B68}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A41F5C88-972F-4FB8-ADD8-65F5F2396B68}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A41F5C88-972F-4FB8-ADD8-65F5F2396B68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEED7803-5D64-45D5-BDB1-0107192258C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEED7803-5D64-45D5-BDB1-0107192258C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEED7803-5D64-45D5-BDB1-0107192258C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEED7803-5D64-45D5-BDB1-0107192258C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A805B1F-1F23-44BF-AA6A-C23F87CF4F72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A805B1F-1F23-44BF-AA6A-C23F87CF4F72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A805B1F-1F23-44BF-AA6A-C23F87CF4F72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A805B1F-1F23-44BF-AA6A-C23F87CF4F72}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
