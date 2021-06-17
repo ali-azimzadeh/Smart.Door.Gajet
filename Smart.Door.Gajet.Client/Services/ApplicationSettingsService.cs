@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Blazored.LocalStorage;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ namespace Smart.Door.Gajet.Client.Services
         {
             Configuration = configuration;
 
+         
             BaseUrl =
                 Configuration.GetSection("BaseUrl").Value;
         }
@@ -41,5 +43,7 @@ namespace Smart.Door.Gajet.Client.Services
         public string Username { get; set; }
 
         public string BaseUrl { get; set; }
+
+
     }
 }

@@ -1,22 +1,83 @@
 ﻿@inherits LayoutComponentBase
 @layout LoginLayout
 
+<center class="center">
+    @*<div class="jumbotron text-center">
+        <h1>My First Bootstrap Page</h1>
+        <p>Resize this responsive page to see the effect!</p>
+    </div>
 
-<center>
-    <div class="col-8 card">
-        <div class="col-12 row">
-            <p>&nbsp;</p>
-        </div>
-        <div class="col-12 row">
-            <div class="col-6" style="border-right:groove">
-                <img src="/images/logo.svg" width="400" height="400" />
-            </div>
-            <div class="col-6" style="border-left:thick">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3>Column 1</h3>
+                <p>Lorem ipsum dolor..</p>
                 @Body
             </div>
         </div>
-        <div class="col-12 row">
-            <p>&nbsp;</p>
+    </div>*@
+    <div class="container">
+        <div class="row">
+            <div class="col-12 card my-style">
+                <div class="col-4 ">
+                    <p>&nbsp;</p>
+                </div>
+                <img class="card-img-top" src="/images/logo.svg" width="200" height="200">
+                <div class="col-4 ">
+                    <p>&nbsp;</p>
+                </div>
+                <div class="card-body" style="border-top:double">
+                    @Body
+                    @*<h4 class="card-title">John Doe</h4>
+                    <p class="card-text">Some example text.</p>
+                    <a href="#" class="btn btn-primary">See Profile</a>*@
+                </div>
+            </div>
+            </div>
         </div>
-    </div>
 </center>
+
+<!--<center class="center">
+    <div class="col-4 card my-style">-->
+        @*<div class="row-cols-6">
+            <p>&nbsp;sdfasdf</p>
+        </div>*@
+        <!--<img src="/images/logo.svg" width="400" height="400" />
+        @Body
+        <div style="border-top:solid">-->
+
+            @*<div style="border-top:double">
+
+            </div>*@
+            @*<div class="col-12 row">
+                <p>&nbsp;</p>
+            </div>*@
+        <!--</div>
+
+    </div>
+</center>-->
+
+
+@*<div class="col-6" style="border-right:solid">
+    <img src="/images/logo.svg" width="400" height="400" />
+</div>
+<div class="row-cols-6">
+    <div class="col-6" style="border-left:double">
+        @Body
+    </div>
+</div>
+<div class="col-12 row">
+    <p>&nbsp;</p>
+</div>*@
+
+<style>
+    .my-style {
+        background-color: lightgoldenrodyellow;
+        border: outset;
+        /*height: 800px;*/
+    }
+
+    .center {
+        top: 200px;
+    }
+</style>

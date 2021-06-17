@@ -6,11 +6,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Shared\Components\LoginRedirect.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Blazored.LocalStorage" Version="4.1.1" />
     <PackageReference Include="DevExpress.Blazor" Version="21.1.3" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="5.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.5" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.7" />
     <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
   </ItemGroup>
 
@@ -19,15 +24,23 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Shared\Components\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Azx.Razor\Azx.Razor.csproj" />
     <ProjectReference Include="..\Data\Data.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
     <ProjectReference Include="..\Resources\Resources.csproj" />
     <ProjectReference Include="..\ViewModels\ViewModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Shared\Components\LoginRedirect.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Shared\Components\LoginRedirect.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Shared\Components\LoginRedirect.razor" />
   </ItemGroup>
 
 </Project>

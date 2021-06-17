@@ -1,36 +1,80 @@
-﻿@page  "/"
+﻿@page  "/login"
 
 @inject NavigationManager NavigationManager
 @using Newtonsoft.Json
 @using System.Security.Claims
+@using DevExpress.Blazor
+@using Smart.Door.Gajet.Client.Infrastructure;
 
 @inject AuthenticationStateProvider AuthenticationStateProvider
-@*@inject Blazored.LocalStorage.ILocalStorageService localStorageService
-@inject IUserService userService*@
+@*@inject Blazored.LocalStorage.ILocalStorageService localStorageService*@
+@inject Services.IUserService AuthenticationService
 @inject IJSRuntime jsRunTime
+
+
+@if (ShowAuthError)
+{
+    <div class="alert alert-danger" role="alert">
+        <p>@Error</p>
+    </div>
+}
+
+@*<EditForm Model="_userForAuthentication" OnValidSubmit="ExecuteLogin" class="card card-body bg-light mt-5">
+        <DataAnnotationsValidator />
+        <div class="form-group row">
+            <label for="email" class="col-md-2 col-form-label">Email:</label>
+            <div class="col-md-10">
+                <InputText id="email" class="form-control" @bind-Value="_userForAuthentication.UserName" />
+                <ValidationMessage For="@(() => _userForAuthentication.UserName)" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="password" class="col-md-2 col-form-label">Password:</label>
+            <div class="col-md-10">
+                <InputText type="password" id="password" class="form-control" @bind-Value="_userForAuthentication.Password" />
+                <ValidationMessage For="@(() => _userForAuthentication.Password)" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-right">
+                <button type="submit" class="btn btn-success">Login</button>
+            </div>
+        </div>
+    </EditForm>*@
+
 
 <EditForm Model="@user" OnValidSubmit="@ValidateUser">
     <div>
-        <br /><br /><br /><br /><br />
+        <br /><br />
     </div>
     <div>
-        <h3 style="font-weight:bold; color:purple">Book Stores Login</h3>
+        <h3 style="font-weight:bold; color:purple">Test Login</h3>
     </div>
     <div>
-        <br />
+        <br /><br />
     </div>
-    <div class="col-12 row">
-        <input class="form-control col-12" @bind="user.CellPhoneNumber" placeholder="email address" />
+    <div class="col-sm-8 row">
+
+        <DevExpress.Blazor.DxTextBox Id="username"
+                                     @bind-Text="@_userForAuthentication.UserName"
+                                     auutocomplete="on"
+                                     maxlength="14"
+                                     CssClass="my-style1"
+                                     ClearButtonDisplayMode="DevExpress.Blazor.DataEditorClearButtonDisplayMode.Auto"
+                                     SizeMode="SizeMode.Medium"
+                                     NullText="mobile">
+
+        </DevExpress.Blazor.DxTextBox>
     </div>
     <br />
-    <div class="col-12 row">
-        <input type="password" class="form-control col-12" @bind="user.Password" placeholder="password" />
+    <div class="col-sm-8 row">
+        <input type="password" class="form-control col-12" @bind="_userForAuthentication.Password" placeholder="password" />
     </div>
     <br />
     <div class="col-12 row">
         <span class="col-12"></span>
-        <input type="submit" class="form-control col-6 btn btn-primary" value="Login" />
         <a href="/signup" class="col-3">Sign up</a>
+        <button type="button" class="form-control col-8 btn btn-primary" @onclick="OnLogin">Login</button>
     </div>
     <br />
     <div class="col-12 row" style="text-align:left; font-weight:bold">
@@ -38,19 +82,82 @@
     </div>
 </EditForm>
 
-@code { 
-    private Models.User user;
+<style>
+    .my-style1 {
+        /* border: 1px solid darkorchid;*/
+        /* border-radius: 1px;*/
+        width: 100%;
+    }
+</style>
+
+@code {
+
+    private ViewModels.User.LoginRequestViewModel _userForAuthentication = new ViewModels.User.LoginRequestViewModel();
+    //[Inject]
+    //public Services.IUserService AuthenticationService { get; set; }
+
+    //public NavigationManager NavigationManager { get; set; }
+
+    [Parameter]
+    public bool ShowAuthError { get; set; }
+
+    [Parameter]
+    public string Error { get; set; }
+    public async Task OnLogin()
+    {
+        // await AuthenticationService.Logout();
+
+        ShowAuthError = false;
+        Data.LoginResponse result = await AuthenticationService.LoginAsync(_userForAuthentication);
+        if (string.IsNullOrWhiteSpace(result.Token) == true)
+        {
+            Error = "Error occured";// result.ErrorMessage;
+            ShowAuthError = true;
+        }
+        else
+        {
+            if (result.IsActive == true)
+            {
+                await ((CustomAuthenticationStateProvider)AuthenticationStateProvider).MarkUserAsAuthenticated(result);
+                NavigationManager.NavigateTo("/index");
+            }
+            else
+            {
+                LoginMesssage = "Invalid username or password";
+            }
+
+            // return await Task.FromResult(true);
+            // NavigationManager.NavigateTo("");
+
+        }
+    }
+
+
+
+
+
+
+
+    Models.User user;// { get; set; }
 
     public string LoginMesssage { get; set; }
 
     ClaimsPrincipal claimsPrincipal;
-
+    string TextValue { get; set; } = "Some text";
     //[CascadingParameter]
     //private Task<Microsoft.AspNetCore.Components.Authorization.AuthenticationState> authenticationStateTask { get; set; }
 
     protected async override Task OnInitializedAsync()
     {
-        //user = new Models.User();
+
+        user = new Models.User();
+
+        // redirect to home if already logged in
+        if (AuthenticationService.User != null)
+        {
+            NavigationManager.NavigateTo("");
+        }
+
 
         //claimsPrincipal = (await authenticationStateTask).User;
 
@@ -83,4 +190,7 @@
         //}
         return true;
         //return await Task.FromResult(true);
-    } }
+    }
+
+
+}

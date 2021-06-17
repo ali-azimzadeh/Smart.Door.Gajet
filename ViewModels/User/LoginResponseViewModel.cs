@@ -24,6 +24,7 @@ namespace ViewModels.User
             Id = user.Id;
             FullName = user.FullName;
             UserName = user.Username;
+            IsActive = user.IsActive;
         }
 
         public Guid Id { get; set; }
@@ -33,5 +34,7 @@ namespace ViewModels.User
         public string FullName { get; set; }
 
         public string UserName { get; set; }
+
+        public bool IsActive { get; set; }
     }
 }

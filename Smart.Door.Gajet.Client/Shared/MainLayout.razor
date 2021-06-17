@@ -1,36 +1,45 @@
 ﻿@inherits LayoutComponentBase
+
 @using Microsoft.AspNetCore.Components.Authorization
+@using Smart.Door.Gajet.Client.Infrastructure;
+
 @inject NavigationManager NavigationManager
-@*@inject AuthenticationStateProvider AuthenticationStateProvider*@
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
-<div class="sidebar">
-    <NavMenu />
-</div>
-
-<div class="main">
-    <div class="top-row px-4">
-        <AuthorizeView>
-            <Authorized>
-                <a href="/" @onclick="(() => Logout())">Logout</a>
-            </Authorized>
-            <NotAuthorized>
-                <a href="/">Login</a>
-            </NotAuthorized>
-        </AuthorizeView>
-
-
-        <a href="https://docs.microsoft.com/en-us/aspnet/" target="_blank">About</a>
+@*@attribute [Authorize]*@
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
     </div>
 
-    <div class="content px-4">
-        @Body
+    <div class="main">
+        <div class="top-row px-4">
+            <AuthorizeView>
+                <Authorized>
+                    Logged in as @context.User.Identity.Name
+                    <a href="/" @onclick="(() => Logout())">Logout</a>
+                </Authorized>
+                <NotAuthorized>
+                    <a href="login">Login</a>
+                    @*<Smart.Door.Gajet.Client.Shared.Components.LoginRedirect />*@
+                </NotAuthorized>
+            </AuthorizeView>
+
+
+            <a href="https://docs.microsoft.com/en-us/aspnet/" target="_blank">About</a>
+        </div>
+
+        <div class="content px-4">
+            @Body
+        </div>
     </div>
 </div>
+
 
 @code{
     public async Task Logout()
     {
-        // await ((CustomAuthenticationStateProvider)AuthenticationStateProvider).MarkUserAsLoggedOut();
+        await ((CustomAuthenticationStateProvider)AuthenticationStateProvider).MarkUserAsLoggedOut();
         NavigationManager.NavigateTo("");
     }
 }

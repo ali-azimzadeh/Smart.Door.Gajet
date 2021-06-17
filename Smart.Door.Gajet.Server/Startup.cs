@@ -32,7 +32,8 @@ namespace Smart.Door.Gajet.Server
                     builder =>
                     {
                         builder
-                            .WithOrigins("http://localhost:34983")
+                            .WithOrigins("http://localhost:34983",
+                                         "https://localhost:44385")
                             .AllowAnyHeader()
                             .AllowAnyMethod()
                             //.AllowCredentials()

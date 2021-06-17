@@ -1,4 +1,6 @@
-﻿using Smart.Door.Gajet.Client.Services;
+﻿using Blazored.LocalStorage;
+using Microsoft.AspNetCore.Components.Authorization;
+using Smart.Door.Gajet.Client.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +12,22 @@ namespace Smart.Door.Gajet.Client.Infrastructure
     public abstract class ServiceBase : object
     {
         public ServiceBase
-            (System.Net.Http.HttpClient httpClient, ApplicationSettingsService applicationSettingsService, LogsService logsService)
+            (System.Net.Http.HttpClient httpClient, ApplicationSettingsService applicationSettingsService, LogsService logsService,
+            Data.UseInMemoryDatabase inMemoryDatabase, AuthenticationStateProvider _authStateProvider,
+            Services.ILocalStorageService localStorageService, Services.ISessionStorageService sessionStorage)
             :base()
         {
             HttpClient = httpClient;
 
             LogsService = logsService;
+
+            LocalStorage = localStorageService;
+
+            SessionStorage = sessionStorage;
+
+            AuthenticationStateProvider = _authStateProvider;
+
+            InMemoryDatabase = inMemoryDatabase;
 
             ApplicationSettingsService = applicationSettingsService;
 
@@ -37,6 +49,14 @@ namespace Smart.Door.Gajet.Client.Infrastructure
         protected System.Net.Http.HttpClient HttpClient { get; }
 
         protected System.Text.Json.JsonSerializerOptions JsonOptions { get; set; }
+
+        protected Data.UseInMemoryDatabase InMemoryDatabase { get; }
+
+        protected AuthenticationStateProvider AuthenticationStateProvider { get; }
+
+        protected Services.ILocalStorageService LocalStorage { get; }
+
+        protected Services.ISessionStorageService SessionStorage { get; }
 
         protected  async Task<TResponse> GetAsync<TResponse>(string url, string query = null)
         {
