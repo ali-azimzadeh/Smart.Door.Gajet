@@ -1,17 +1,24 @@
+@inject NavigationManager Navigation
+@inject Services.ApplicationSettingsService authser
 
 <CascadingAuthenticationState>
     <Router AppAssembly="@typeof(Program).Assembly">
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
-                <Authorizing>
-                    <h1>Hello, context.User.Identity.Name!</h1>
-                </Authorizing>
+            
                 <NotAuthorized>
                     @if (context.User.Identity.IsAuthenticated == false)
                     {
-                        <Smart.Door.Gajet.Client.Pages.LoginPages.Login/>
+                        @*<Smart.Door.Gajet.Client.Pages.LoginPages.Login />*@
+                                                <Smart.Door.Gajet.Client.Shared.Components.LoginRedirect />
                     }
+                    <Smart.Door.Gajet.Client.Shared.Components.LoginRedirect />
                 </NotAuthorized>
+
+                <Authorizing>
+                    <div class="main">Please wait...</div>
+                </Authorizing>
+
             </AuthorizeRouteView>
         </Found>
         <NotFound>
@@ -26,6 +33,14 @@
 </CascadingAuthenticationState>
 
 
+@code{ 
+    protected override void OnInitialized()
+    {
+        //if(authser.IsAuthenticated ==false)
+        ////Navigation.NavigateTo($"authentication/login?returnUrl={Uri.EscapeDataString(Navigation.Uri)}");
+        //Navigation.NavigateTo("login");
+    }
+}
 
 
 

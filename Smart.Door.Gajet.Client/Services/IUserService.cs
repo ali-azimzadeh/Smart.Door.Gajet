@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 
 namespace Smart.Door.Gajet.Client.Services
 {
+    /// <summary>
+    /// متد های مورد نیاز برای سرویس 
+    /// user
+    /// که برای اتصال  و ارسال درخواست به سمت سرور بکار می روند
+    /// </summary>
     public interface IUserService
     {
         LoginResponse User { get; }
@@ -21,6 +26,7 @@ namespace Smart.Door.Gajet.Client.Services
         Task<System.Collections.Generic.IEnumerable<Result<Models.User>>> GetActiveAsync();
 
         Task Initialize();
+
         Task Logout();
     }
 }

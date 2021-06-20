@@ -1,0 +1,28 @@
+﻿<h3>Logout</h3>
+
+@code {
+
+    [Inject]
+    public HttpClient HttpClient { get; set; }
+
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
+
+    [Inject]
+    public ILocalStorageService LocalStorage { get; set; }
+
+    [Inject]
+    public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await LocalStorage.RemoveItemAsync("user");
+
+        await (AuthenticationStateProvider as Smart.Door.Gajet.Client.Infrastructure.CustomAuthenticationStateProvider)
+            .MarkUserAsLoggedOut();
+
+        NavigationManager.NavigateTo("/login");
+    }
+
+
+}

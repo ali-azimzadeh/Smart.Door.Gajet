@@ -23,18 +23,24 @@ namespace Smart.Door.Gajet.Client.Infrastructure
         //    public IUserService _userService { get; set; }
         protected UseInMemoryDatabase InMemoryDatabase { get; }
 
-        private readonly HttpClient _httpClient;
-        private readonly AuthenticationState _anonymous;
+        protected  HttpClient HttpClient { get; }
 
-//        public CustomAuthenticationStateProvider(HttpClient httpClient, ILocalStorageService localStorage)
+        private AuthenticationState Anonymous { get; }
+
+        //        public CustomAuthenticationStateProvider(HttpClient httpClient, ILocalStorageService localStorage)
         public CustomAuthenticationStateProvider(HttpClient httpClient, UseInMemoryDatabase inMemoryDatabase,
             Services.ILocalStorageService localStorage, Services.ISessionStorageService sessionStorage)
         {
-            _httpClient = httpClient;
+            HttpClient = httpClient;
+
             InMemoryDatabase = inMemoryDatabase;
+
             LocalStorageService = localStorage;
+
             SessionStorageService = sessionStorage;
-            _anonymous = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+
+            Anonymous =
+                new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
         }
 
         //    public CustomAuthenticationStateProvider(ILocalStorageService localStorageService,
@@ -73,7 +79,7 @@ namespace Smart.Door.Gajet.Client.Infrastructure
             //await _localStorageService.SetItemAsync("accessToken", user.AccessToken);
             //await _localStorageService.SetItemAsync("refreshToken", user.RefreshToken);
 
-             await LocalStorageService.SetItem<LoginResponse>("user", user);
+            await LocalStorageService.SetItemAsync<LoginResponse>("user", user);
 
             // await SessionStorageService.SetItem<LoginResponse>("user", user);
 
@@ -92,7 +98,7 @@ namespace Smart.Door.Gajet.Client.Infrastructure
             //await _localStorageService.RemoveItemAsync("accessToken");
 
 
-            await LocalStorageService.RemoveItem("user");
+            await LocalStorageService.RemoveItemAsync("user");
 
             //await SessionStorageService.RemoveItem("user");
 
@@ -125,7 +131,7 @@ namespace Smart.Door.Gajet.Client.Infrastructure
                                     //new Claim(ClaimTypes.Name, user.Id.ToString()),
                                     //new Claim(ClaimTypes.Role, user.RoleId.ToString()),
                                     //new Claim("IsUserEmployedBefore1990", IsUserEmployedBefore1990(user))
-                                }, "apiauth_type");
+                                }, "jwtAuthType");
             }
 
             return claimsIdentity;
@@ -142,33 +148,65 @@ namespace Smart.Door.Gajet.Client.Infrastructure
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             //            var token = await _localStorageService.GetItemAsync<string>("authToken");
-            var user = await LocalStorageService.GetItem<LoginResponse>("user");
-           
+            var user = 
+                await LocalStorageService.GetItemAsync<LoginResponse>("user");
+
             // var user = await SessionStorageService.GetItem<LoginResponse>("user");
 
             //var user = await InMemoryDatabase.GetItemsAsync();
 
             var token = string.Empty;
-            if (user!=null)
+            if (user != null)
             {
                 token = user.Token;
             }
 
+            if (string.IsNullOrWhiteSpace(token) == true)
+            {
+                return Anonymous;
+            }
 
-            if (string.IsNullOrWhiteSpace(token))
-                return _anonymous;
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
-            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(JwtParser.ParseClaimsFromJwt(token), "jwtAuthType")));
+            HttpClient.DefaultRequestHeaders.Authorization = 
+                new AuthenticationHeaderValue("bearer", token);
+
+            var claimPrincipal = 
+                new ClaimsPrincipal(GetClaimsIdentity(user: user));
+
+            var authenticationState =
+                new AuthenticationState(claimPrincipal);
+
+            //این کد هم درست کار می کند
+            //var authenticationState =
+            //    new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(JwtParser.ParseClaimsFromJwt(token), "jwtAuthType")));
+
+            return authenticationState;
         }
+        public void NotifyUserAuthentication(LoginResponse user)
+        {
+            var authenticatedUser = 
+                new ClaimsPrincipal(GetClaimsIdentity(user: user));
+
+            var authState = 
+                Task.FromResult(new AuthenticationState(authenticatedUser));
+
+            NotifyAuthenticationStateChanged(authState);
+        }
+
         public void NotifyUserAuthentication(string email)
         {
-            var authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, email) }, "jwtAuthType"));
-            var authState = Task.FromResult(new AuthenticationState(authenticatedUser));
+            var authenticatedUser = 
+                new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, email) }, "jwtAuthType"));
+
+            var authState = 
+                Task.FromResult(new AuthenticationState(authenticatedUser));
+
             NotifyAuthenticationStateChanged(authState);
         }
         public void NotifyUserLogout()
         {
-            var authState = Task.FromResult(_anonymous);
+            var authState =
+                Task.FromResult(Anonymous);
+
             NotifyAuthenticationStateChanged(authState);
         }
 

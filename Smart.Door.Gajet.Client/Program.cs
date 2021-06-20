@@ -1,5 +1,6 @@
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -78,6 +79,22 @@ namespace Smart.Door.Gajet.Client
 
             var authenticationService = host.Services.GetRequiredService<IUserService>();
             await authenticationService.Initialize();
+
+            //builder.Services.AddApiAuthorization<SmartAuthenticationState>(options =>
+            //{
+            //    options.AuthenticationPaths..LogOutSucceededPath = "";
+            //});
+
+            //    builder.Services.AddScoped<IRemoteAuthenticationService<RemoteAuthenticationState>,AuthenticationService>();
+
+            builder.Services.AddOidcAuthentication(options =>
+            {
+                // Configure your authentication provider options here.
+                // For more information, see https://aka.ms/blazor-standalone-auth
+                builder.Configuration.Bind("Local", options.ProviderOptions);
+            });
+
+
 
             await host.RunAsync();
 

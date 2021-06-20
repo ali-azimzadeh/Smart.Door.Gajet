@@ -1,12 +1,12 @@
 ﻿@page  "/login"
 
-@inject NavigationManager NavigationManager
+
 @using Newtonsoft.Json
 @using System.Security.Claims
 @using DevExpress.Blazor
-@using Smart.Door.Gajet.Client.Infrastructure;
 
-@inject AuthenticationStateProvider AuthenticationStateProvider
+
+
 @*@inject Blazored.LocalStorage.ILocalStorageService localStorageService*@
 @inject Services.IUserService AuthenticationService
 @inject IJSRuntime jsRunTime
@@ -95,14 +95,22 @@
     private ViewModels.User.LoginRequestViewModel _userForAuthentication = new ViewModels.User.LoginRequestViewModel();
     //[Inject]
     //public Services.IUserService AuthenticationService { get; set; }
+    [Inject]
+    public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
-    //public NavigationManager NavigationManager { get; set; }
+    [Inject]
+    public HttpClient HttpClient { get; set; }
+
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
 
     [Parameter]
     public bool ShowAuthError { get; set; }
 
     [Parameter]
     public string Error { get; set; }
+
+
     public async Task OnLogin()
     {
         // await AuthenticationService.Logout();
@@ -118,7 +126,12 @@
         {
             if (result.IsActive == true)
             {
-                await ((CustomAuthenticationStateProvider)AuthenticationStateProvider).MarkUserAsAuthenticated(result);
+                await (AuthenticationStateProvider as Smart.Door.Gajet.Client.Infrastructure.CustomAuthenticationStateProvider)
+                    .MarkUserAsAuthenticated(result);
+
+                HttpClient.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", result.Token);
+
                 NavigationManager.NavigateTo("/index");
             }
             else

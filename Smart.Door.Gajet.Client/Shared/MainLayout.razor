@@ -3,7 +3,7 @@
 @using Microsoft.AspNetCore.Components.Authorization
 @using Smart.Door.Gajet.Client.Infrastructure;
 
-@inject NavigationManager NavigationManager
+
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
 @*@attribute [Authorize]*@
@@ -16,7 +16,8 @@
         <div class="top-row px-4">
             <AuthorizeView>
                 <Authorized>
-                    Logged in as @context.User.Identity.Name
+                    <Smart.Door.Gajet.Client.Shared.Components.LoginDisplay/>
+                    @*Logged in as @context.User.Identity.Name*@
                     <a href="/" @onclick="(() => Logout())">Logout</a>
                 </Authorized>
                 <NotAuthorized>
@@ -26,7 +27,7 @@
             </AuthorizeView>
 
 
-            <a href="https://docs.microsoft.com/en-us/aspnet/" target="_blank">About</a>
+            <a href="https://docs.microsoft.com/en-us/aspnet/" target="_blank">@State</a>
         </div>
 
         <div class="content px-4">
@@ -37,9 +38,40 @@
 
 
 @code{
+
+    [Inject]
+    public ILocalStorageService LocalStorage { get; set; }
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthenticationState { get; set; }
+
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
+
+    public string  State { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        State = "About";
+
+        var authenticationState = await AuthenticationState;
+
+        if(authenticationState.User.Identity.IsAuthenticated==true)
+        {
+            var user =
+                await LocalStorage.GetItemAsync<Data.LoginResponse>("user");
+
+            State = user.FullName;
+        }
+        else
+        {
+            NavigationManager.NavigateTo("Login");
+        }
+    }
+
     public async Task Logout()
     {
-        await ((CustomAuthenticationStateProvider)AuthenticationStateProvider).MarkUserAsLoggedOut();
+        await (AuthenticationStateProvider as CustomAuthenticationStateProvider).MarkUserAsLoggedOut();
         NavigationManager.NavigateTo("");
     }
 }
